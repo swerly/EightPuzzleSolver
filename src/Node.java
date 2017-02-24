@@ -6,10 +6,42 @@ import java.util.ArrayList;
 public class Node {
     private ArrayList<Integer> currentBoard;
     private Node currentBestParent;
-    double g, h;
+    int g, h;
 
     public Node(){
-        currentBoard = new ArrayList<>();
+        this(new ArrayList<>());
+    }
+
+    public Node(ArrayList<Integer> current){
+        this.currentBoard = current;
         currentBestParent = null;
+    }
+
+    public ArrayList<Integer> getCurrentBoard() {
+        return currentBoard;
+    }
+
+    public Node getCurrentBestParent() {
+        return currentBestParent;
+    }
+
+    public int getFitness(){
+        return g+h;
+    }
+
+    public void setCurrentBoard(ArrayList<Integer> currentBoard) {
+        this.currentBoard = currentBoard;
+    }
+
+    public void setCurrentBestParent(Node currentBestParent) {
+        this.currentBestParent = currentBestParent;
+    }
+
+    public void setG(int g) {
+        this.g = g;
+    }
+
+    public void setH(int h) {
+        this.h = h;
     }
 }
