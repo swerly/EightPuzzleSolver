@@ -6,7 +6,8 @@ import java.util.ArrayList;
 public class Node {
     private ArrayList<Integer> currentBoard;
     private Node currentBestParent;
-    int g, h;
+    private int g, h;
+    private int firstReachedIteration;
 
     public Node(){
         this(new ArrayList<>());
@@ -43,5 +44,21 @@ public class Node {
 
     public void setH(int h) {
         this.h = h;
+    }
+
+    public int getG() {
+        return g;
+    }
+
+    public int getH() {
+        return h;
+    }
+
+    public int getFirstReachedIteration() {
+        return firstReachedIteration;
+    }
+
+    public void setFirstReachedIteration(int firstReachedIteration) {
+        this.firstReachedIteration = firstReachedIteration;
     }
 }

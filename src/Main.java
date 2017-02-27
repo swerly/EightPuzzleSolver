@@ -6,5 +6,6 @@ public class Main {
     public static void main(String[] args){
         EightPuzzleSolver eps = new EightPuzzleSolver();
         eps.run();
+        System.out.println("Done! Output files created in \"outputFiles/\"");
     }
 }

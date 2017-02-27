@@ -13,7 +13,7 @@ public class Utilities {
     }
 
     public ArrayList<Node> expand(Node node){
-        ArrayList<Node> expanded = new ArrayList<>();
+        ArrayList<Node> closedList = new ArrayList<>();
         ArrayList<Integer> original = node.getCurrentBoard();
         ArrayList<ArrayList<Integer>> children = new ArrayList<>();
         int zeroPosition = node.getCurrentBoard().indexOf(0);
@@ -66,12 +66,12 @@ public class Utilities {
         }
 
         for (ArrayList<Integer> child : children){
-            Node x = new Node(child);
-            x.setCurrentBestParent(node);
-            expanded.add(x);
+            //Node x = new Node(child);
+            //x.setCurrentBestParent(node);
+            closedList.add(new Node(child));
         }
 
-        return expanded;
+        return closedList;
     }
 
     private ArrayList<Integer> getSwapped(ArrayList<Integer> original, int p1, int p2){
@@ -90,8 +90,8 @@ public class Utilities {
         return true;
     }
 
-    public ArrayList<Node> order(ArrayList<Node> frontier){
-        ArrayList<Node> newFront = new ArrayList<>(frontier);
+    public ArrayList<Node> order(ArrayList<Node> openList){
+        ArrayList<Node> newFront = new ArrayList<>(openList);
         Collections.sort(newFront, new Comparator<Node>() {
             @Override
             public int compare(Node o1, Node o2) {
@@ -157,5 +157,76 @@ public class Utilities {
 
     public int combinedManhattanDisplaced(Node toTest){
         return manhattanDistances(toTest) + displacedTiles(toTest);
+    }
+
+    public String getDirection(Node n1, Node n2){
+        int[][] b1 = getBoardAs2DArray(n1.getCurrentBoard());
+        int[][] b2 = getBoardAs2DArray(n2.getCurrentBoard());
+        int i1=-1, i2=-1, j1=-1, j2=-1;
+
+        for (int i = 0; i<BOARD_DIM; i++){
+            for (int j = 0; j<BOARD_DIM; j++){
+                if (b1[i][j] == 0){
+                    i1 = i;
+                    j1 = j;
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0; i<BOARD_DIM; i++){
+            for (int j = 0; j<BOARD_DIM; j++){
+                if (b2[i][j] == 0){
+                    i2 = i;
+                    j2 = j;
+                    break;
+                }
+            }
+        }
+        int diffI = i1-i2;
+        int diffJ = j1-j2;
+
+        if (diffI != 0){
+            return diffI < 0 ? "DOWN" : "UP";
+        } else {
+            return diffJ < 0 ? "RIGHT" : "LEFT";
+        }
+
+    }
+
+    public ArrayList<String> getStepsToPrint(ArrayList<Node> steps){
+        ArrayList<String> stepsToPrint = new ArrayList<>();
+        for (int i = 0; i<steps.size(); i++){
+            StringBuilder sb = new StringBuilder();
+            if (i != 0) {
+                String step = String.format("%2d", i);
+                sb.append("        Step " + step + ": ");
+                sb.append(getBoardAsString(steps.get(i)));
+                String action = String.format("%5s", getDirection(steps.get(i-1), steps.get(i)));
+                sb.append(", Action: " + action);
+                String g = String.format("%2d", steps.get(i).getG());
+                String h = String.format("%2d", steps.get(i).getH());
+                sb.append(", g = " + g);
+                sb.append(", h = " + h);
+                String firstIter = String.format("%3d", steps.get(i).getFirstReachedIteration());
+                sb.append(", First reached in iteration: " + firstIter);
+                stepsToPrint.add(sb.toString());
+            }
+        }
+        return stepsToPrint;
+    }
+
+    public String getBoardAsString(Node n){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        for (int i : n.getCurrentBoard()){
+            sb.append(i);
+            if (i != n.getCurrentBoard().get(n.getCurrentBoard().size()-1)){
+                sb.append(",");
+            }
+        }
+        sb.append("}");
+
+        return sb.toString();
     }
 }
